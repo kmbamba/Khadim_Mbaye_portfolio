@@ -42,7 +42,7 @@ const upload = multer({
 // Middleware
 app.use(cors());
 app.use(express.json());
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Importer le module database
 const database = require('./database');
@@ -98,8 +98,10 @@ app.put('/api/profile', async (req, res) => {
 // GET - Récupérer tous les projets
 app.get('/api/projects', async (req, res) => {
     try {
+        console.log('Fetching projects...');
         const { category, featured } = req.query;
         let projects = await database.getCollection('projects');
+        console.log(`Found ${projects.length} projects`);
         
         if (category && category !== 'all') {
             projects = projects.filter(p => p.category === category);
@@ -111,6 +113,7 @@ app.get('/api/projects', async (req, res) => {
         
         res.json(projects);
     } catch (error) {
+        console.error('Error fetching projects:', error);
         res.status(500).json({ error: error.message });
     }
 });
