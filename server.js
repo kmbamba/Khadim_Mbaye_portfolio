@@ -308,9 +308,30 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// Serve admin page
+// Serve admin page (with basic auth)
 app.get('/admin', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'admin.html'));
+    // Check for basic auth
+    const authHeader = req.headers.authorization;
+    
+    if (!authHeader) {
+        res.setHeader('WWW-Authenticate', 'Basic realm="Admin Panel"');
+        return res.status(401).send('Authentification requise');
+    }
+    
+    // Decode credentials
+    const auth = Buffer.from(authHeader.split(' ')[1], 'base64').toString().split(':');
+    const username = auth[0];
+    const password = auth[1];
+    
+    // Check credentials (username: admin, password: from env or default)
+    const adminPassword = process.env.ADMIN_PASSWORD || 'admin123';
+    
+    if (username === 'admin' && password === adminPassword) {
+        res.sendFile(path.join(__dirname, 'public', 'admin.html'));
+    } else {
+        res.setHeader('WWW-Authenticate', 'Basic realm="Admin Panel"');
+        res.status(401).send('Identifiants incorrects');
+    }
 });
 
 // Error handling

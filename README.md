@@ -1,356 +1,139 @@
-# Portfolio Professionnel avec Panel Admin
+# Portfolio Khadim Mbaye - Cloud & DevOps Engineer Junior
 
-Un portfolio moderne et responsive avec un **panel d'administration complet** pour gérer dynamiquement vos projets, certifications, compétences et expériences. Prêt pour le déploiement sur Vercel !
+Portfolio professionnel moderne avec panel d'administration complet et thème navy Cloud/DevOps.
 
-## 🌟 Nouveautés
+🌐 **Site en ligne** : [https://khadim-mbaye-portfolio-egqb.vercel.app/](https://khadim-mbaye-portfolio-egqb.vercel.app/)
 
-- ✅ **Panel Admin Complet** - Gérez tout votre contenu sans toucher au code
-- ✅ **API REST** - Backend Express.js avec endpoints pour toutes les données
-- ✅ **Déploiement Vercel** - Configuration prête pour Vercel
-- ✅ **Gestion Dynamique** - Ajoutez/modifiez/supprimez projets et certifications
-- ✅ **Interface Intuitive** - Admin panel moderne et facile à utiliser
+## 👨‍💻 À propos
+
+**Khadim Mbaye** - Cloud & DevOps Engineer Junior  
+📍 Dakar, Sénégal 🇸🇳  
+📧 mbaye.khadim.dev@gmail.com  
+☁️ AWS Certified Cloud Practitioner (CLF-C02)  
+
+## 🚀 Technologies
+
+- **Frontend** : HTML5, CSS3, JavaScript (Vanilla)
+- **Backend** : Node.js, Express.js
+- **Database** : MongoDB Atlas
+- **Déploiement** : Vercel
+- **Design** : Navy theme professionnel Cloud/DevOps
 
 ## ✨ Fonctionnalités
 
-- **Design Moderne** : Interface élégante avec animations fluides
-- **Responsive** : Parfaitement adapté à tous les écrans (mobile, tablette, desktop)
-- **Sections Complètes** :
-  - 🏠 Page d'accueil avec effet de frappe
-  - 👨‍💻 Section À propos avec statistiques
-  - 💼 Compétences avec barres de progression animées
-  - 🚀 Portfolio de projets avec filtres
-  - 📝 Expérience professionnelle et formation (timeline)
-  - 📧 Formulaire de contact
-- **Animations** : Effets de scroll reveal et transitions élégantes
-- **Performance** : Code optimisé et léger
-- **Accessibilité** : Conforme aux standards WCAG
+- ✅ Portfolio responsive avec design navy moderne
+- ✅ 6 projets Cloud/DevOps avec filtres (DevOps, Cloud/IaC, Web)
+- ✅ 2 certifications AWS
+- ✅ 4 catégories de compétences techniques
+- ✅ 5 expériences professionnelles
+- ✅ Formulaire de contact
+- ✅ CV téléchargeable
+- ✅ Panel d'administration complet (CRUD)
+- ✅ Upload d'images
+- ✅ Authentification admin
+- ✅ Base de données MongoDB persistante
+- ✅ SEO optimisé (Open Graph, Twitter Cards)
 
-## 🛠️ Technologies Utilisées
+## 🔐 Panel Admin
 
-### Frontend
-- HTML5
-- CSS3 (Flexbox, Grid, Animations)
-- JavaScript Vanilla (ES6+)
-- Font Awesome pour les icônes
+URL : `/admin`  
+Username : `admin`  
+Password : (défini dans `ADMIN_PASSWORD` ou `admin123` par défaut)
 
-### Backend
-- Node.js
-- Express.js
-- REST API
-- CORS
+Le panel admin permet de :
+- Gérer les projets (ajouter/modifier/supprimer)
+- Gérer les certifications
+- Gérer les expériences
+- Modifier les compétences
+- Modifier le profil
 
-## 🚀 Installation et Lancement Local
-
-### Installation
+## 🛠️ Installation locale
 
 ```bash
-# Cloner le repository
-git clone https://github.com/kmbamba/portfolio.git
-cd portfolio
+# Cloner le repo
+git clone https://github.com/kmbamba/Khadim_Mbaye_portfolio.git
+cd Khadim_Mbaye_portfolio
 
 # Installer les dépendances
 npm install
 
-# Créer le fichier .env (optionnel)
+# Créer un fichier .env
 cp .env.example .env
-```
 
-### Lancement en Local
+# Configurer MongoDB Atlas (optionnel)
+# Éditer .env et ajouter votre DATABASE_URL
 
-```bash
-# Démarrer le serveur de développement
+# Initialiser la base de données (si MongoDB)
+node init-database.js
+
+# Démarrer le serveur
 npm run dev
-
-# Le portfolio sera accessible sur :
-# http://localhost:3000
-
-# Le panel admin sur :
-# http://localhost:3000/admin
 ```
 
-### Structure du Projet
+Le site sera accessible sur `http://localhost:3000`
 
-```
-portfolio/
-├── public/               # Fichiers statiques
-│   ├── index.html       # Page principale du portfolio
-│   ├── admin.html       # Panel d'administration
-│   ├── styles.css       # Styles CSS
-│   ├── script.js        # Scripts du portfolio
-│   ├── app.js           # Chargement dynamique des données
-│   └── admin.js         # Scripts du panel admin
-├── server.js            # Serveur Express & API REST
-├── package.json         # Dépendances du projet
-├── vercel.json          # Configuration Vercel
-├── .env.example         # Exemple de variables d'environnement
-├── DEPLOYMENT.md        # Guide de déploiement complet
-└── README.md            # Ce fichier
-```
+## 📝 Variables d'environnement
 
-## 📝 Gestion du Contenu
-
-### Via le Panel Admin (Recommandé)
-
-1. Accéder à `/admin` sur votre site
-2. Gérer tous vos contenus via l'interface :
-   - ✅ **Projets** : Ajouter, modifier, supprimer
-   - ✅ **Certifications** : Gérer vos certifications
-   - ✅ **Compétences** : Ajuster les niveaux
-   - ✅ **Expérience** : Ajouter des expériences professionnelles
-   - ✅ **Profil** : Mettre à jour vos informations personnelles
-
-### Fonctionnalités du Panel Admin
-
-#### Gestion des Projets
-- Titre, description, catégorie
-- Upload d'images
-- Tags personnalisables
-- Liens GitHub et démo
-- Marquer comme projet vedette
-
-#### Gestion des Certifications
-- Nom et organisation
-- Date d'obtention
-- ID de certification
-- Lien de vérification
-- Image de la certification
-
-#### Gestion des Compétences
-- Catégories personnalisables
-- Niveaux ajustables (0-100%)
-- Icons Font Awesome
-
-#### Gestion de l'Expérience
-- Type (Travail, Formation, Certification)
-- Titre et entreprise
-- Période
-- Description et réalisations
-
-#### Gestion du Profil
-- Nom et titre professionnel
-- Biographie
-- Informations de contact
-- Liens sociaux
-
-### Personnalisation Manuelle
-
-Si vous préférez modifier directement le code, vous pouvez éditer :
-- **Données initiales** : `server.js` (lignes 20-150)
-- **Styles** : `public/styles.css`
-- **Structure HTML** : `public/index.html`
-
-### Couleurs
-
-Modifiez les variables CSS dans `styles.css` (lignes 2-12) :
-
-```css
-:root {
-    --primary-color: #4A90E2;    /* Couleur principale */
-    --secondary-color: #50C878;   /* Couleur secondaire */
-    --accent-color: #FF6B6B;      /* Couleur d'accent */
-    /* ... */
-}
-```
-
-### Images
-
-Pour ajouter vos propres images :
-
-1. Créez un dossier `assets/images/`
-2. Ajoutez vos photos de profil et captures d'écran de projets
-3. Remplacez les placeholders dans `index.html` :
-   - Images de projets : lignes 200, 220, 240, etc.
-   - Photo de profil : ligne 55 (hero) et ligne 75 (about)
-
-## 💾 Persistance des Données
-
-### Options Disponibles
-
-Le portfolio supporte 3 méthodes de stockage :
-
-#### 1. **Mémoire (Par défaut)** ⚡
-- Données stockées en RAM
-- ⚠️ Perdues au redémarrage
-- Parfait pour le développement
-- Configuration : `DB_TYPE=memory` dans `.env`
-
-#### 2. **Fichier JSON** 📄
-- Données sauvegardées dans `data.json`
-- Persistance locale
-- Idéal pour petits projets
-- Configuration : `DB_TYPE=json` dans `.env`
-
-#### 3. **MongoDB** 🍃
-- Base de données complète
-- Parfait pour la production
-- Configuration :
-  ```env
-  DB_TYPE=mongodb
-  DATABASE_URL=mongodb+srv://user:pass@cluster.mongodb.net/portfolio
-  ```
-
-### Configurer MongoDB (Recommandé pour Production)
-
-1. **Créer un compte MongoDB Atlas** (gratuit)
-   - Aller sur [mongodb.com/cloud/atlas](https://www.mongodb.com/cloud/atlas)
-   - Créer un cluster gratuit
-
-2. **Obtenir la connection string**
-   - Cliquer sur "Connect"
-   - Choisir "Connect your application"
-   - Copier la connection string
-
-3. **Ajouter dans `.env`** :
-   ```env
-   DB_TYPE=mongodb
-   DATABASE_URL=mongodb+srv://username:password@cluster.mongodb.net/portfolio
-   ```
-
-4. **Ajouter dans Vercel** :
-   - Settings > Environment Variables
-   - Ajouter `DB_TYPE` et `DATABASE_URL`
-
-5. **Installer le driver** :
-   ```bash
-   npm install mongodb
-   ```
-
-## 📧 Configuration du Formulaire de Contact
-
-Le formulaire envoie les données à l'API `/api/contact`. Pour recevoir les emails :
-
-### Option A : Intégrer un Service Email
-
-Modifier `server.js` pour utiliser nodemailer :
-
-```bash
-npm install nodemailer
-```
-
-Ajouter dans `.env` :
 ```env
-SMTP_HOST=smtp.gmail.com
-SMTP_PORT=587
-SMTP_USER=votre-email@gmail.com
-SMTP_PASS=votre-mot-de-passe-application
+PORT=3000
+NODE_ENV=development
+DB_TYPE=mongodb  # ou json pour fichier local
+DATABASE_URL=mongodb+srv://...
+ADMIN_PASSWORD=votre_mot_de_passe
 ```
-
-### Option B : Services Tiers (Plus Simple)
-
-- **[EmailJS](https://www.emailjs.com/)** - Gratuit, facile
-- **[SendGrid](https://sendgrid.com/)** - API puissante
-- **[Resend](https://resend.com/)** - Moderne et simple
 
 ## 🌐 Déploiement sur Vercel
 
-### Déploiement Rapide
+1. Connectez votre repo GitHub à Vercel
+2. Configurez les variables d'environnement :
+   - `DB_TYPE=mongodb`
+   - `DATABASE_URL=mongodb+srv://...`
+   - `NODE_ENV=production`
+   - `ADMIN_PASSWORD=votre_mot_de_passe_securise`
+3. Déployez automatiquement à chaque push
 
-1. **Pusher sur GitHub** :
-```bash
-git add .
-git commit -m "Ready for deployment"
-git push origin main
-```
+### Configuration d'un domaine personnalisé sur Vercel
 
-2. **Déployer sur Vercel** :
-   - Aller sur [vercel.com](https://vercel.com)
-   - Cliquer sur "New Project"
-   - Importer votre repository GitHub
-   - Cliquer sur "Deploy"
+1. Allez dans votre projet Vercel > **Settings** > **Domains**
+2. Ajoutez votre domaine (ex: `khadim-mbaye.dev`)
+3. Configurez les DNS chez votre fournisseur de domaine :
+   - Type : `A` → Valeur : `76.76.21.21`
+   - Type : `CNAME` → Nom : `www` → Valeur : `cname.vercel-dns.com`
+4. Attendez la propagation DNS (~24h max)
 
-3. **Accéder à votre site** :
-   - Portfolio : `https://votre-projet.vercel.app`
-   - Admin : `https://votre-projet.vercel.app/admin`
+## 📊 SEO & Analytics
 
-📖 **Guide Complet** : Voir [DEPLOYMENT.md](DEPLOYMENT.md) pour les instructions détaillées
+- ✅ Meta tags Open Graph (Facebook, LinkedIn)
+- ✅ Twitter Cards
+- ✅ Balises SEO optimisées
+- 🔄 Google Analytics (décommentez le code dans `index.html` et ajoutez votre ID)
 
-### Autres Options de Déploiement
+### Configurer Google Analytics
 
-- **Netlify** : Compatible mais nécessite une configuration supplémentaire pour l'API
-- **Railway** : Parfait pour Node.js avec base de données
-- **Render** : Alternative gratuite à Heroku
+1. Créez un compte sur [analytics.google.com](https://analytics.google.com)
+2. Créez une propriété et obtenez votre ID (ex: `G-XXXXXXXXXX`)
+3. Dans `public/index.html`, décommentez le code Google Analytics
+4. Remplacez `G-XXXXXXXXXX` par votre ID
+5. Redéployez sur Vercel
 
-## 📱 Responsive Design
+## 🔒 Sécurité
 
-Le portfolio s'adapte automatiquement aux résolutions suivantes :
-- 📱 Mobile : < 576px
-- 📱 Tablette : 576px - 968px
-- 💻 Desktop : > 968px
+- ✅ Authentification Basic Auth pour le panel admin
+- ✅ Variables d'environnement pour les secrets
+- ✅ Validation des uploads d'images (5MB max, formats: jpg, png, gif, webp)
+- ✅ CORS configuré
+- ✅ Protection contre les injections
 
-## ⚡ Optimisation SEO
+## 📄 License
 
-Pour améliorer le référencement :
+MIT License - Khadim Mbaye © 2026
 
-1. Modifiez les meta tags dans `<head>` :
-```html
-<meta name="description" content="Votre description">
-<meta name="keywords" content="vos, mots, clés">
-```
+## 📞 Contact
 
-2. Ajoutez un fichier `robots.txt` :
-```
-User-agent: *
-Allow: /
-Sitemap: https://votre-site.com/sitemap.xml
-```
-
-3. Créez un `sitemap.xml` pour indexer vos pages
-
-## 🎨 Fonctionnalités Bonus (À Ajouter)
-
-- Mode sombre (code disponible commenté dans `script.js`)
-- Blog intégré
-- Multilingue (FR/EN)
-- Animations avancées avec GSAP
-- Particules en arrière-plan
-- Effet de curseur personnalisé
-
-## 📚 Documentation Complète
-
-- **[API.md](API.md)** - Documentation complète de l'API REST
-- **[DEPLOYMENT.md](DEPLOYMENT.md)** - Guide détaillé de déploiement sur Vercel
-- **README.md** - Ce fichier (vue d'ensemble du projet)
-
-## 🔗 Liens Utiles
-
-- [Express.js Documentation](https://expressjs.com/)
-- [Vercel Documentation](https://vercel.com/docs)
-- [MongoDB Atlas](https://www.mongodb.com/cloud/atlas)
-- [Font Awesome Icons](https://fontawesome.com/icons)
-
-## 📝 Scripts NPM
-
-```bash
-npm run dev      # Lancer le serveur en développement
-npm run build    # Build pour la production
-npm start        # Lancer le serveur en production
-```
-
-## 🌟 Fonctionnalités Avancées à Ajouter
-
-- [ ] Authentification JWT pour le panel admin
-- [ ] Upload d'images (Cloudinary, AWS S3)
-- [ ] Blog intégré
-- [ ] Mode sombre
-- [ ] Multilingue (i18n)
-- [ ] Analytics intégré
-- [ ] Export PDF du CV
-- [ ] Recherche de projets
-- [ ] Filtres avancés
-- [ ] Comments sur les projets
-
-## 🤝 Contribution
-
-Les suggestions et améliorations sont les bienvenues ! N'hésitez pas à créer une issue ou une pull request.
-
-## 📞 Support
-
-Si vous avez des questions, contactez-moi via :
 - GitHub : [@kmbamba](https://github.com/kmbamba)
-- Email : votre.email@example.com
+- LinkedIn : [Khadim Mbaye](https://linkedin.com/in/khadim-mbaye-88ab00329)
+- Email : mbaye.khadim.dev@gmail.com
 
 ---
 
-**Bon courage pour votre recherche d'emploi ! 🚀**
-
-*Développé avec ❤️ pour impressionner les recruteurs*
+**🌟 Si vous aimez ce projet, n'hésitez pas à mettre une étoile !**
