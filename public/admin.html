@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Portfolio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="admin-styles.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #07111F;
+            color: #F8FAFC;
+        }
+
+        .admin-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 250px;
+            background: linear-gradient(135deg, #2563EB 0%, #22D3EE 100%);
+            color: white;
+            padding: 2rem;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .sidebar h2 {
+            margin-bottom: 2rem;
+            font-size: 1.5rem;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 1rem;
+        }
+
+        .sidebar-menu a {
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            transition: background 0.3s;
+        }
+
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .main-content {
+            flex: 1;
+            margin-left: 250px;
+            padding: 2rem;
+        }
+
+        .header {
+            background: #0B1728;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid #1E293B;
+        }
+
+        .header h1 {
+            color: #F8FAFC;
+            font-size: 2rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #2563EB 0%, #22D3EE 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.4);
+        }
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .section {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .section h2 {
+            color: #333;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #555;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .tags-input {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            min-height: 50px;
+        }
+
+        .tag {
+            background: #667eea;
+            color: white;
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .tag .remove {
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .items-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .item-card {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 2px solid #e0e0e0;
+            transition: all 0.3s;
+        }
+
+        .item-card:hover {
+            border-color: #667eea;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .item-card h3 {
+            color: #333;
+            margin-bottom: 0.75rem;
+            font-size: 1.2rem;
+        }
+
+        .item-card p {
+            color: #666;
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .item-card .actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .item-card .btn {
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-header h2 {
+            color: #333;
+        }
+
+        .close-modal {
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #999;
+        }
+
+        .close-modal:hover {
+            color: #333;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .stat-card h3 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card p {
+            opacity: 0.9;
+        }
+
+        .alert {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                position: relative;
+                height: auto;
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .items-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <h2><i class="fas fa-cog"></i> Admin Panel</h2>
+            <ul class="sidebar-menu">
+                <li><a href="#dashboard" class="menu-link active" data-section="dashboard">
+                    <i class="fas fa-chart-line"></i> Tableau de bord
+                </a></li>
+                <li><a href="#projects" class="menu-link" data-section="projects">
+                    <i class="fas fa-folder"></i> Projets
+                </a></li>
+                <li><a href="#certifications" class="menu-link" data-section="certifications">
+                    <i class="fas fa-certificate"></i> Certifications
+                </a></li>
+                <li><a href="#skills" class="menu-link" data-section="skills">
+                    <i class="fas fa-code"></i> Compétences
+                </a></li>
+                <li><a href="#experience" class="menu-link" data-section="experience">
+                    <i class="fas fa-briefcase"></i> Expérience
+                </a></li>
+                <li><a href="#profile" class="menu-link" data-section="profile">
+                    <i class="fas fa-user"></i> Profil
+                </a></li>
+                <li><a href="/" target="_blank">
+                    <i class="fas fa-eye"></i> Voir le site
+                </a></li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Dashboard Section -->
+            <section id="dashboard" class="section active">
+                <div class="header">
+                    <h1>Tableau de bord</h1>
+                </div>
+                <div class="stats">
+                    <div class="stat-card">
+                        <h3 id="stat-projects">0</h3>
+                        <p>Projets</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="stat-certifications">0</h3>
+                        <p>Certifications</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="stat-skills">0</h3>
+                        <p>Compétences</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="stat-experience">0</h3>
+                        <p>Expériences</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Projects Section -->
+            <section id="projects" class="section">
+                <div class="header">
+                    <h2>Gestion des Projets</h2>
+                    <button class="btn btn-primary" onclick="openProjectModal()">
+                        <i class="fas fa-plus"></i> Nouveau Projet
+                    </button>
+                </div>
+                <div id="projects-list" class="items-grid"></div>
+            </section>
+
+            <!-- Certifications Section -->
+            <section id="certifications" class="section">
+                <div class="header">
+                    <h2>Gestion des Certifications</h2>
+                    <button class="btn btn-primary" onclick="openCertificationModal()">
+                        <i class="fas fa-plus"></i> Nouvelle Certification
+                    </button>
+                </div>
+                <div id="certifications-list" class="items-grid"></div>
+            </section>
+
+            <!-- Skills Section -->
+            <section id="skills" class="section">
+                <div class="header">
+                    <h2>Gestion des Compétences</h2>
+                </div>
+                <div id="skills-list"></div>
+            </section>
+
+            <!-- Experience Section -->
+            <section id="experience" class="section">
+                <div class="header">
+                    <h2>Gestion de l'Expérience</h2>
+                    <button class="btn btn-primary" onclick="openExperienceModal()">
+                        <i class="fas fa-plus"></i> Nouvelle Expérience
+                    </button>
+                </div>
+                <div id="experience-list" class="items-grid"></div>
+            </section>
+
+            <!-- Profile Section -->
+            <section id="profile" class="section">
+                <div class="header">
+                    <h2>Gestion du Profil</h2>
+                </div>
+                <form id="profile-form"></form>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modal for Projects -->
+    <div id="project-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="project-modal-title">Nouveau Projet</h2>
+                <span class="close-modal" onclick="closeModal('project-modal')">&times;</span>
+            </div>
+            <form id="project-form">
+                <input type="hidden" id="project-id">
+                <div class="form-group">
+                    <label>Titre *</label>
+                    <input type="text" id="project-title" required>
+                </div>
+                <div class="form-group">
+                    <label>Description *</label>
+                    <textarea id="project-description" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Image</label>
+                    <input type="url" id="project-image" placeholder="https://... ou uploadez une image">
+                    <div style="margin-top: 0.5rem;">
+                        <input type="file" id="project-image-file" accept="image/*" style="display: none;">
+                        <button type="button" class="btn btn-secondary" onclick="document.getElementById('project-image-file').click()">
+                            <i class="fas fa-upload"></i> Upload Image
+                        </button>
+                        <img id="project-image-preview" style="display: none; max-width: 200px; margin-top: 0.5rem; border: 2px solid #1E293B; border-radius: 8px;">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Catégorie *</label>
+                    <select id="project-category" required>
+                        <option value="devops">DevOps</option>
+                        <option value="cloud">Cloud/IaC</option>
+                        <option value="web">Web</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Tags (séparés par des virgules)</label>
+                    <input type="text" id="project-tags" placeholder="React, Node.js, MongoDB">
+                </div>
+                <div class="form-group">
+                    <label>URL de Démo</label>
+                    <input type="url" id="project-demo" placeholder="https://...">
+                </div>
+                <div class="form-group">
+                    <label>URL GitHub</label>
+                    <input type="url" id="project-github" placeholder="https://github.com/...">
+                </div>
+                <div class="form-group checkbox-group">
+                    <input type="checkbox" id="project-featured">
+                    <label for="project-featured">Projet vedette</label>
+                </div>
+                <div style="display: flex; gap: 1rem;">
+                    <button type="submit" class="btn btn-success">Enregistrer</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('project-modal')">Annuler</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal for Certifications -->
+    <div id="certification-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="certification-modal-title">Nouvelle Certification</h2>
+                <span class="close-modal" onclick="closeModal('certification-modal')">&times;</span>
+            </div>
+            <form id="certification-form">
+                <input type="hidden" id="certification-id">
+                <div class="form-group">
+                    <label>Nom *</label>
+                    <input type="text" id="certification-name" required>
+                </div>
+                <div class="form-group">
+                    <label>Organisation *</label>
+                    <input type="text" id="certification-organization" required>
+                </div>
+                <div class="form-group">
+                    <label>Date *</label>
+                    <input type="text" id="certification-date" placeholder="2024" required>
+                </div>
+                <div class="form-group">
+                    <label>ID de Credential</label>
+                    <input type="text" id="certification-credential">
+                </div>
+                <div class="form-group">
+                    <label>URL de Credential</label>
+                    <input type="url" id="certification-url" placeholder="https://...">
+                </div>
+                <div class="form-group">
+                    <label>Image</label>
+                    <input type="url" id="certification-image" placeholder="https://... ou uploadez une image">
+                    <div style="margin-top: 0.5rem;">
+                        <input type="file" id="certification-image-file" accept="image/*" style="display: none;">
+                        <button type="button" class="btn btn-secondary" onclick="document.getElementById('certification-image-file').click()">
+                            <i class="fas fa-upload"></i> Upload Image
+                        </button>
+                        <img id="certification-image-preview" style="display: none; max-width: 200px; margin-top: 0.5rem; border: 2px solid #1E293B; border-radius: 8px;">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="certification-description"></textarea>
+                </div>
+                <div style="display: flex; gap: 1rem;">
+                    <button type="submit" class="btn btn-success">Enregistrer</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('certification-modal')">Annuler</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal for Experience -->
+    <div id="experience-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="experience-modal-title">Nouvelle Expérience</h2>
+                <span class="close-modal" onclick="closeModal('experience-modal')">&times;</span>
+            </div>
+            <form id="experience-form">
+                <input type="hidden" id="experience-id">
+                <div class="form-group">
+                    <label>Type *</label>
+                    <select id="experience-type" required>
+                        <option value="work">Travail</option>
+                        <option value="education">Formation</option>
+                        <option value="certification">Certification</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Titre *</label>
+                    <input type="text" id="experience-title" required>
+                </div>
+                <div class="form-group">
+                    <label>Entreprise/Institution *</label>
+                    <input type="text" id="experience-company" required>
+                </div>
+                <div class="form-group">
+                    <label>Période *</label>
+                    <input type="text" id="experience-period" placeholder="2023 - Présent" required>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="experience-description"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Réalisations (une par ligne)</label>
+                    <textarea id="experience-achievements"></textarea>
+                </div>
+                <div style="display: flex; gap: 1rem;">
+                    <button type="submit" class="btn btn-success">Enregistrer</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('experience-modal')">Annuler</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="admin.js"></script>
+</body>
+</html>

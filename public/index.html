@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Portfolio professionnel de [Votre Nom] - Développeur Full Stack">
+    <meta name="keywords" content="développeur, full stack, portfolio, web development">
+    <title>Portfolio - Développeur Full Stack</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <a href="#home">KB</a>
+            </div>
+            <ul class="nav-menu" id="nav-menu">
+                <li><a href="#home" class="nav-link">Accueil</a></li>
+                <li><a href="#about" class="nav-link">À propos</a></li>
+                <li><a href="#skills" class="nav-link">Compétences</a></li>
+                <li><a href="#projects" class="nav-link">Projets</a></li>
+                <li><a href="#certifications" class="nav-link">Certifications</a></li>
+                <li><a href="#experience" class="nav-link">Expérience</a></li>
+                <li><a href="#contact" class="nav-link">Contact</a></li>
+            </ul>
+            <div class="hamburger" id="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    Bonjour, je suis <span class="highlight">Khadim Mbaye</span>
+                </h1>
+                <h2 class="hero-subtitle">
+                    <span class="typing-text">Cloud & DevOps Engineer Junior</span>
+                </h2>
+                <p class="hero-description">
+                    Certifié AWS Cloud Practitioner, avec compétences en Terraform, Kubernetes/EKS et CI/CD sécurisé
+                </p>
+                <div class="hero-buttons">
+                    <a href="#projects" class="btn btn-primary">Voir mes projets</a>
+                    <a href="#contact" class="btn btn-secondary">Me contacter</a>
+                </div>
+                <div class="social-links">
+                    <a href="https://github.com/kmbamba" target="_blank" aria-label="GitHub">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="https://linkedin.com/in/khadim-mbaye-88ab00329" target="_blank" aria-label="LinkedIn">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                    <a href="mailto:mbaye.khadim.dev@gmail.com" aria-label="Email">
+                        <i class="fas fa-envelope"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="hero-image">
+                <img src="khadim-photo.jpg" alt="Khadim Mbaye - Cloud & DevOps Engineer" class="profile-photo">
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <a href="#about">
+                <i class="fas fa-chevron-down"></i>
+            </a>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="container">
+            <h2 class="section-title">À propos de moi</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <p>
+                        Cloud & DevOps junior certifié AWS Cloud Practitioner (SAA-C03 en préparation), avec de solides compétences en Terraform, Kubernetes/EKS et CI/CD sécurisé. 
+                        J'ai conçu et déployé de bout en bout un pipeline DevSecOps sur AWS EKS avec supervision Prometheus/Grafana.
+                    </p>
+                    <p>
+                        Développeur principal de Natt, plateforme fintech de tontine digitale (MERN) pour l'UEMOA. 
+                        Je recherche un premier poste en Cloud Engineering, DevOps ou Solutions Architecture.
+                    </p>
+                    <div class="about-stats">
+                        <div class="stat">
+                            <h3>1+</h3>
+                            <p>Années d'expérience</p>
+                        </div>
+                        <div class="stat">
+                            <h3>6+</h3>
+                            <p>Projets réalisés</p>
+                        </div>
+                        <div class="stat">
+                            <h3>20+</h3>
+                            <p>Technologies maîtrisées</p>
+                        </div>
+                    </div>
+                    <a href="CV_Khadim_Mbaye_DevOps.pdf" download class="btn btn-primary">
+                        <i class="fas fa-download"></i> Télécharger mon CV
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="skills">
+        <div class="container">
+            <h2 class="section-title">Compétences</h2>
+            <div class="skills-grid">
+                <!-- Les compétences seront chargées dynamiquement depuis l'API -->
+                <p style="text-align: center; color: #666;">Chargement des compétences...</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="projects">
+        <div class="container">
+            <h2 class="section-title">Mes Projets</h2>
+            <div class="projects-filter">
+                <button class="filter-btn active" data-filter="all">Tous</button>
+                <button class="filter-btn" data-filter="devops">DevOps</button>
+                <button class="filter-btn" data-filter="cloud">Cloud/IaC</button>
+                <button class="filter-btn" data-filter="web">Web</button>
+            </div>
+            <div class="projects-grid">
+                <!-- Les projets seront chargés dynamiquement depuis l'API -->
+                <p style="text-align: center; color: #666;">Chargement des projets...</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Certifications Section -->
+    <section id="certifications" class="certifications">
+        <div class="container">
+            <h2 class="section-title">Certifications</h2>
+            <p class="section-subtitle">Mes certifications professionnelles AWS</p>
+            <div class="certifications-grid">
+                <!-- Les certifications seront chargées dynamiquement depuis l'API -->
+                <p style="text-align: center; color: #666;">Chargement des certifications...</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section id="experience" class="experience">
+        <div class="container">
+            <h2 class="section-title">Expérience & Formation</h2>
+            <div class="timeline">
+                <!-- L'expérience sera chargée dynamiquement depuis l'API -->
+                <p style="text-align: center; color: #666;">Chargement de l'expérience...</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <h2 class="section-title">Contactez-moi</h2>
+            <p class="section-subtitle">Une question ou un projet en tête ? N'hésitez pas à me contacter !</p>
+            <div class="contact-content">
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="contact-details">
+                            <h3>Email</h3>
+                            <a href="mailto:mbaye.khadim.dev@gmail.com">mbaye.khadim.dev@gmail.com</a>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <div class="contact-details">
+                            <h3>Téléphone</h3>
+                            <a href="tel:+221776157458">+221 77 615 74 58</a>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div class="contact-details">
+                            <h3>Localisation</h3>
+                            <p>Dakar, Sénégal 🇸🇳</p>
+                        </div>
+                    </div>
+                    <div class="contact-social">
+                        <a href="https://github.com/kmbamba" target="_blank" aria-label="GitHub">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="https://linkedin.com/in/khadim-mbaye-88ab00329" target="_blank" aria-label="LinkedIn">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                    </div>
+                </div>
+                <form class="contact-form" id="contactForm">
+                    <div class="form-group">
+                        <input type="text" id="name" name="name" placeholder="Votre nom" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" id="email" name="email" placeholder="Votre email" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="subject" name="subject" placeholder="Sujet" required>
+                    </div>
+                    <div class="form-group">
+                        <textarea id="message" name="message" rows="6" placeholder="Votre message" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-paper-plane"></i> Envoyer le message
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Khadim Mbaye. Tous droits réservés.</p>
+            <p>Conçu et développé avec <i class="fas fa-heart"></i></p>
+        </div>
+    </footer>
+
+    <!-- Scroll to Top Button -->
+    <button id="scrollTop" class="scroll-top" aria-label="Retour en haut">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script src="script.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
