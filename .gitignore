@@ -13,9 +13,6 @@ Thumbs.db
 .env.local
 .env.production
 
-# Database
-data.json
-
 # Dependencies
 node_modules/
 

@@ -23,17 +23,23 @@ class Database {
 
     // Initialiser la connexion
     async connect() {
+        console.log(`🔌 Attempting to connect with DB_TYPE: ${this.type}`);
+        
         if (this.type === 'mongodb' && DB_URL) {
             try {
-                this.client = await MongoClient.connect(DB_URL);
+                console.log('🔄 Connecting to MongoDB Atlas...');
+                this.client = await MongoClient.connect(DB_URL, {
+                    serverSelectionTimeoutMS: 5000,
+                    connectTimeoutMS: 10000
+                });
                 this.db = this.client.db();
                 console.log('✅ Connected to MongoDB');
                 return true;
             } catch (error) {
                 console.error('❌ MongoDB connection failed:', error.message);
-                console.log('⚠️ Falling back to in-memory storage');
-                this.type = 'memory';
-                return false;
+                console.log('⚠️ Falling back to JSON storage');
+                this.type = 'json';
+                return this.connect(); // Retry with JSON
             }
         } else if (this.type === 'json') {
             try {
@@ -284,9 +290,23 @@ class Database {
                 return { projects, certifications, skills, experience, profile };
             } catch (error) {
                 console.error('Error fetching data from MongoDB:', error);
-                return this.data;
+                // Return empty data structure on error
+                return {
+                    projects: [],
+                    certifications: [],
+                    skills: [],
+                    experience: [],
+                    profile: {}
+                };
             }
         }
+        
+        // For JSON or memory, ensure data is initialized
+        if (!this.data) {
+            console.log('⚠️ Data not initialized, loading defaults...');
+            this.data = this.getDefaultData();
+        }
+        
         return this.data;
     }
 
@@ -297,9 +317,16 @@ class Database {
                 return await this.db.collection(collectionName).find().toArray();
             } catch (error) {
                 console.error(`Error fetching ${collectionName}:`, error);
-                return this.data[collectionName] || [];
+                return [];
             }
         }
+        
+        // For JSON or memory, ensure data is initialized
+        if (!this.data) {
+            console.log('⚠️ Data not initialized, loading defaults...');
+            this.data = this.getDefaultData();
+        }
+        
         return this.data[collectionName] || [];
     }
 
