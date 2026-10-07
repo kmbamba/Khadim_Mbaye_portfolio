@@ -3,10 +3,12 @@ const cors = require('cors');
 const path = require('path');
 const multer = require('multer');
 const fs = require('fs');
+const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production';
 
 // Configuration upload d'images
 const storage = multer.diskStorage({
@@ -303,35 +305,64 @@ app.post('/api/contact', (req, res) => {
     });
 });
 
+// POST - Admin Login
+app.post('/api/admin/login', (req, res) => {
+    const { username, password } = req.body;
+    
+    const adminUsername = 'admin';
+    const adminPassword = process.env.ADMIN_PASSWORD || 'admin123';
+    
+    if (username === adminUsername && password === adminPassword) {
+        // Generate JWT token
+        const token = jwt.sign(
+            { username, role: 'admin' },
+            JWT_SECRET,
+            { expiresIn: '24h' }
+        );
+        
+        res.json({
+            success: true,
+            token,
+            message: 'Connexion réussie'
+        });
+    } else {
+        res.status(401).json({
+            success: false,
+            message: 'Identifiants incorrects'
+        });
+    }
+});
+
+// Middleware to verify JWT token
+function verifyToken(req, res, next) {
+    const token = req.headers.authorization?.replace('Bearer ', '');
+    
+    if (!token) {
+        return res.status(401).json({ error: 'Token manquant' });
+    }
+    
+    try {
+        const decoded = jwt.verify(token, JWT_SECRET);
+        req.user = decoded;
+        next();
+    } catch (error) {
+        res.status(401).json({ error: 'Token invalide' });
+    }
+}
+
 // Serve index.html for the root
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// Serve admin page (with basic auth)
+// Serve login page
+app.get('/login', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'login.html'));
+});
+
+// Serve admin page (redirect to login if no token)
 app.get('/admin', (req, res) => {
-    // Check for basic auth
-    const authHeader = req.headers.authorization;
-    
-    if (!authHeader) {
-        res.setHeader('WWW-Authenticate', 'Basic realm="Admin Panel"');
-        return res.status(401).send('Authentification requise');
-    }
-    
-    // Decode credentials
-    const auth = Buffer.from(authHeader.split(' ')[1], 'base64').toString().split(':');
-    const username = auth[0];
-    const password = auth[1];
-    
-    // Check credentials (username: admin, password: from env or default)
-    const adminPassword = process.env.ADMIN_PASSWORD || 'admin123';
-    
-    if (username === 'admin' && password === adminPassword) {
-        res.sendFile(path.join(__dirname, 'public', 'admin.html'));
-    } else {
-        res.setHeader('WWW-Authenticate', 'Basic realm="Admin Panel"');
-        res.status(401).send('Identifiants incorrects');
-    }
+    res.sendFile(path.join(__dirname, 'public', 'admin.html'));
 });
 
 // Error handling

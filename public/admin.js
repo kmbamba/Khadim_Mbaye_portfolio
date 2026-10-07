@@ -1,6 +1,39 @@
 // ===== API BASE URL =====
 const API_URL = window.location.origin + '/api';
 
+// ===== AUTHENTICATION =====
+// Check if user is authenticated
+const token = localStorage.getItem('adminToken');
+if (!token) {
+    window.location.href = '/login';
+}
+
+// Add token to all API requests
+const originalFetch = window.fetch;
+window.fetch = function(url, options = {}) {
+    if (url.startsWith('/api') && !url.includes('/login')) {
+        options.headers = {
+            ...options.headers,
+            'Authorization': `Bearer ${token}`
+        };
+    }
+    return originalFetch(url, options);
+};
+
+// Logout function
+document.addEventListener('DOMContentLoaded', () => {
+    const logoutBtn = document.getElementById('logoutBtn');
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (confirm('Voulez-vous vraiment vous déconnecter ?')) {
+                localStorage.removeItem('adminToken');
+                window.location.href = '/login';
+            }
+        });
+    }
+});
+
 // ===== IMAGE UPLOAD HANDLER =====
 async function handleImageUpload(fileInputId, urlInputId, previewId) {
     const fileInput = document.getElementById(fileInputId);
