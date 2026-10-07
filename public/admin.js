@@ -8,14 +8,19 @@ if (!token) {
     window.location.href = '/login';
 }
 
-// Add token to all API requests
+// Add token only to write operations (POST, PUT, DELETE)
 const originalFetch = window.fetch;
 window.fetch = function(url, options = {}) {
+    const method = options.method || 'GET';
+    
+    // Add token only for write operations and admin endpoints
     if (url.startsWith('/api') && !url.includes('/login')) {
-        options.headers = {
-            ...options.headers,
-            'Authorization': `Bearer ${token}`
-        };
+        if (['POST', 'PUT', 'DELETE'].includes(method.toUpperCase())) {
+            options.headers = {
+                ...options.headers,
+                'Authorization': `Bearer ${token}`
+            };
+        }
     }
     return originalFetch(url, options);
 };
