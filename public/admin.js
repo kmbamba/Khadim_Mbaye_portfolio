@@ -8,6 +8,14 @@ if (!token) {
     window.location.href = '/login';
 }
 
+// Helper function to get headers with token
+function getAuthHeaders() {
+    return {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+    };
+}
+
 // Add token only to write operations (POST, PUT, DELETE)
 const originalFetch = window.fetch;
 window.fetch = function(url, options = {}) {

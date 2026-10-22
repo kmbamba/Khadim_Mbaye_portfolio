@@ -83,7 +83,7 @@ app.get('/api/profile', async (req, res) => {
 });
 
 // PUT - Mettre à jour le profil
-app.put('/api/profile', async (req, res) => {
+app.put('/api/profile', verifyToken, async (req, res) => {
     try {
         await database.updateProfile(req.body);
         res.json({ success: true, profile: req.body });
@@ -130,7 +130,7 @@ app.get('/api/projects/:id', async (req, res) => {
 });
 
 // POST - Créer un nouveau projet
-app.post('/api/projects', async (req, res) => {
+app.post('/api/projects', verifyToken, async (req, res) => {
     try {
         const projects = await database.getCollection('projects');
         const newProject = {
@@ -146,7 +146,7 @@ app.post('/api/projects', async (req, res) => {
 });
 
 // PUT - Mettre à jour un projet
-app.put('/api/projects/:id', async (req, res) => {
+app.put('/api/projects/:id', verifyToken, async (req, res) => {
     try {
         await database.updateItem('projects', req.params.id, req.body);
         res.json({ success: true, project: req.body });
@@ -156,7 +156,7 @@ app.put('/api/projects/:id', async (req, res) => {
 });
 
 // DELETE - Supprimer un projet
-app.delete('/api/projects/:id', async (req, res) => {
+app.delete('/api/projects/:id', verifyToken, async (req, res) => {
     try {
         await database.deleteItem('projects', req.params.id);
         res.json({ success: true, message: 'Projet supprimé' });
@@ -176,7 +176,7 @@ app.get('/api/certifications', async (req, res) => {
 });
 
 // POST - Créer une nouvelle certification
-app.post('/api/certifications', async (req, res) => {
+app.post('/api/certifications', verifyToken, async (req, res) => {
     try {
         const certifications = await database.getCollection('certifications');
         const newCert = {
@@ -191,7 +191,7 @@ app.post('/api/certifications', async (req, res) => {
 });
 
 // PUT - Mettre à jour une certification
-app.put('/api/certifications/:id', async (req, res) => {
+app.put('/api/certifications/:id', verifyToken, async (req, res) => {
     try {
         await database.updateItem('certifications', req.params.id, req.body);
         res.json({ success: true, certification: req.body });
@@ -201,7 +201,7 @@ app.put('/api/certifications/:id', async (req, res) => {
 });
 
 // DELETE - Supprimer une certification
-app.delete('/api/certifications/:id', async (req, res) => {
+app.delete('/api/certifications/:id', verifyToken, async (req, res) => {
     try {
         await database.deleteItem('certifications', req.params.id);
         res.json({ success: true, message: 'Certification supprimée' });
@@ -221,7 +221,7 @@ app.get('/api/skills', async (req, res) => {
 });
 
 // PUT - Mettre à jour les compétences
-app.put('/api/skills', async (req, res) => {
+app.put('/api/skills', verifyToken, async (req, res) => {
     try {
         // Pour skills, on remplace tout le tableau
         const data = await database.getAllData();
@@ -243,7 +243,7 @@ app.get('/api/experience', async (req, res) => {
 });
 
 // POST - Créer une nouvelle expérience
-app.post('/api/experience', async (req, res) => {
+app.post('/api/experience', verifyToken, async (req, res) => {
     try {
         const experience = await database.getCollection('experience');
         const newExp = {
@@ -258,7 +258,7 @@ app.post('/api/experience', async (req, res) => {
 });
 
 // PUT - Mettre à jour une expérience
-app.put('/api/experience/:id', async (req, res) => {
+app.put('/api/experience/:id', verifyToken, async (req, res) => {
     try {
         await database.updateItem('experience', req.params.id, req.body);
         res.json({ success: true, experience: req.body });
@@ -268,7 +268,7 @@ app.put('/api/experience/:id', async (req, res) => {
 });
 
 // DELETE - Supprimer une expérience
-app.delete('/api/experience/:id', async (req, res) => {
+app.delete('/api/experience/:id', verifyToken, async (req, res) => {
     try {
         await database.deleteItem('experience', req.params.id);
         res.json({ success: true, message: 'Expérience supprimée' });
