@@ -16,23 +16,6 @@ function getAuthHeaders() {
     };
 }
 
-// Add token only to write operations (POST, PUT, DELETE)
-const originalFetch = window.fetch;
-window.fetch = function(url, options = {}) {
-    const method = options.method || 'GET';
-    
-    // Add token only for write operations and admin endpoints
-    if (url.startsWith('/api') && !url.includes('/login')) {
-        if (['POST', 'PUT', 'DELETE'].includes(method.toUpperCase())) {
-            options.headers = {
-                ...options.headers,
-                'Authorization': `Bearer ${token}`
-            };
-        }
-    }
-    return originalFetch(url, options);
-};
-
 // Logout function
 document.addEventListener('DOMContentLoaded', () => {
     const logoutBtn = document.getElementById('logoutBtn');
@@ -71,6 +54,9 @@ async function handleImageUpload(fileInputId, urlInputId, previewId) {
     try {
         const response = await fetch(`${API_URL}/upload`, {
             method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            },
             body: formData
         });
         
@@ -79,7 +65,7 @@ async function handleImageUpload(fileInputId, urlInputId, previewId) {
             urlInput.value = result.url; // Cloudinary URL
             alert('Image uploadée avec succès sur Cloudinary !');
         } else {
-            alert('Erreur lors de l\'upload');
+            alert('Erreur lors de l\'upload: ' + (result.error || 'Unknown error'));
         }
     } catch (error) {
         console.error('Upload error:', error);
@@ -201,7 +187,10 @@ async function deleteProject(id) {
     if (!confirm('Êtes-vous sûr de vouloir supprimer ce projet ?')) return;
     
     try {
-        await fetch(`${API_URL}/projects/${id}`, { method: 'DELETE' });
+        await fetch(`${API_URL}/projects/${id}`, { 
+            method: 'DELETE',
+            headers: getAuthHeaders()
+        });
         await loadProjects();
         await loadDashboardStats();
     } catch (error) {
@@ -228,13 +217,13 @@ document.getElementById('project-form').addEventListener('submit', async (e) => 
         if (id) {
             await fetch(`${API_URL}/projects/${id}`, {
                 method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
+                headers: getAuthHeaders(),
                 body: JSON.stringify(data)
             });
         } else {
             await fetch(`${API_URL}/projects`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: getAuthHeaders(),
                 body: JSON.stringify(data)
             });
         }
@@ -316,7 +305,10 @@ async function deleteCertification(id) {
     if (!confirm('Êtes-vous sûr de vouloir supprimer cette certification ?')) return;
     
     try {
-        await fetch(`${API_URL}/certifications/${id}`, { method: 'DELETE' });
+        await fetch(`${API_URL}/certifications/${id}`, { 
+            method: 'DELETE',
+            headers: getAuthHeaders()
+        });
         await loadCertifications();
         await loadDashboardStats();
     } catch (error) {
@@ -342,13 +334,13 @@ document.getElementById('certification-form').addEventListener('submit', async (
         if (id) {
             await fetch(`${API_URL}/certifications/${id}`, {
                 method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
+                headers: getAuthHeaders(),
                 body: JSON.stringify(data)
             });
         } else {
             await fetch(`${API_URL}/certifications`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: getAuthHeaders(),
                 body: JSON.stringify(data)
             });
         }
@@ -429,7 +421,10 @@ async function deleteExperience(id) {
     if (!confirm('Êtes-vous sûr de vouloir supprimer cette expérience ?')) return;
     
     try {
-        await fetch(`${API_URL}/experience/${id}`, { method: 'DELETE' });
+        await fetch(`${API_URL}/experience/${id}`, { 
+            method: 'DELETE',
+            headers: getAuthHeaders()
+        });
         await loadExperience();
         await loadDashboardStats();
     } catch (error) {
@@ -455,13 +450,13 @@ document.getElementById('experience-form').addEventListener('submit', async (e) 
         if (id) {
             await fetch(`${API_URL}/experience/${id}`, {
                 method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
+                headers: getAuthHeaders(),
                 body: JSON.stringify(data)
             });
         } else {
             await fetch(`${API_URL}/experience`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: getAuthHeaders(),
                 body: JSON.stringify(data)
             });
         }
@@ -508,7 +503,7 @@ async function updateSkillLevel(catIndex, skillIndex, level) {
         
         await fetch(`${API_URL}/skills`, {
             method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
+            headers: getAuthHeaders(),
             body: JSON.stringify(skills)
         });
     } catch (error) {
@@ -581,7 +576,7 @@ async function loadProfile() {
             try {
                 await fetch(`${API_URL}/profile`, {
                     method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: getAuthHeaders(),
                     body: JSON.stringify(data)
                 });
                 alert('Profil mis à jour avec succès !');
