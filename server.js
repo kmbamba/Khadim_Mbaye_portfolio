@@ -14,10 +14,20 @@ const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-producti
 
 // Configure Cloudinary
 cloudinary.config({
-    cloud_name: process.env.CLOUDINARY_CLOUD_NAME || 'de0ncdsc2',
-    api_key: process.env.CLOUDINARY_API_KEY || '589738915686359',
-    api_secret: process.env.CLOUDINARY_API_SECRET || 'QwYOnouvAiwlPWLgWySr2sSOpcg'
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET
 });
+
+// Verify Cloudinary configuration
+if (!process.env.CLOUDINARY_CLOUD_NAME || !process.env.CLOUDINARY_API_KEY || !process.env.CLOUDINARY_API_SECRET) {
+    console.error('⚠️ WARNING: Cloudinary environment variables not set!');
+    console.error('CLOUDINARY_CLOUD_NAME:', process.env.CLOUDINARY_CLOUD_NAME ? 'Set' : 'NOT SET');
+    console.error('CLOUDINARY_API_KEY:', process.env.CLOUDINARY_API_KEY ? 'Set' : 'NOT SET');
+    console.error('CLOUDINARY_API_SECRET:', process.env.CLOUDINARY_API_SECRET ? 'Set' : 'NOT SET');
+} else {
+    console.log('✅ Cloudinary configured successfully');
+}
 
 // Configure Cloudinary Storage for Multer
 const storage = new CloudinaryStorage({
@@ -67,24 +77,45 @@ database.connect().then(() => {
 });
 
 // ===== ROUTE D'UPLOAD D'IMAGE =====
-app.post('/api/upload', verifyToken, upload.single('image'), (req, res) => {
-    try {
-        if (!req.file) {
-            return res.status(400).json({ error: 'No file uploaded' });
+app.post('/api/upload', verifyToken, (req, res, next) => {
+    upload.single('image')(req, res, (err) => {
+        if (err) {
+            console.error('❌ Multer/Cloudinary error:', err);
+            console.error('Error message:', err.message);
+            return res.status(500).json({ 
+                error: 'Upload failed', 
+                details: err.message 
+            });
         }
         
-        // Cloudinary returns the URL in req.file.path
-        const imageUrl = req.file.path;
-        
-        res.json({ 
-            success: true, 
-            url: imageUrl,
-            filename: req.file.filename
-        });
-    } catch (error) {
-        console.error('Upload error:', error);
-        res.status(500).json({ error: 'Upload failed', details: error.message });
-    }
+        try {
+            console.log('📤 Upload request received');
+            console.log('File:', req.file ? 'Present' : 'Missing');
+            
+            if (!req.file) {
+                console.error('❌ No file in request');
+                return res.status(400).json({ error: 'No file uploaded' });
+            }
+            
+            // Cloudinary returns the URL in req.file.path
+            const imageUrl = req.file.path;
+            console.log('✅ Image uploaded to Cloudinary:', imageUrl);
+            
+            res.json({ 
+                success: true, 
+                url: imageUrl,
+                filename: req.file.filename
+            });
+        } catch (error) {
+            console.error('❌ Upload error:', error);
+            console.error('Error details:', error.message);
+            console.error('Error stack:', error.stack);
+            res.status(500).json({ 
+                error: 'Upload failed', 
+                details: error.message 
+            });
+        }
+    });
 });
 
 // ===== API ROUTES =====
