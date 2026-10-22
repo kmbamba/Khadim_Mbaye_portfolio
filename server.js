@@ -4,41 +4,34 @@ const path = require('path');
 const multer = require('multer');
 const fs = require('fs');
 const jwt = require('jsonwebtoken');
+const cloudinary = require('cloudinary').v2;
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
 require('dotenv').config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production';
 
-// Configuration upload d'images
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        const uploadDir = path.join(__dirname, 'public', 'uploads');
-        if (!fs.existsSync(uploadDir)) {
-            fs.mkdirSync(uploadDir, { recursive: true });
-        }
-        cb(null, uploadDir);
-    },
-    filename: function (req, file, cb) {
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        cb(null, uniqueSuffix + path.extname(file.originalname));
+// Configure Cloudinary
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME || 'de0ncdsc2',
+    api_key: process.env.CLOUDINARY_API_KEY || '589738915686359',
+    api_secret: process.env.CLOUDINARY_API_SECRET || 'QwYOnouvAiwlPWLgWySr2sSOpcg'
+});
+
+// Configure Cloudinary Storage for Multer
+const storage = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    params: {
+        folder: 'portfolio',
+        allowed_formats: ['jpg', 'jpeg', 'png', 'gif', 'webp'],
+        transformation: [{ width: 800, height: 600, crop: 'limit' }]
     }
 });
 
 const upload = multer({ 
     storage: storage,
-    limits: { fileSize: 5 * 1024 * 1024 }, // 5MB max
-    fileFilter: function (req, file, cb) {
-        const allowedTypes = /jpeg|jpg|png|gif|webp/;
-        const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
-        const mimetype = allowedTypes.test(file.mimetype);
-        
-        if (extname && mimetype) {
-            return cb(null, true);
-        } else {
-            cb(new Error('Only images are allowed'));
-        }
-    }
+    limits: { fileSize: 5 * 1024 * 1024 } // 5MB max
 });
 
 // Middleware
@@ -63,7 +56,9 @@ app.post('/api/upload', upload.single('image'), (req, res) => {
             return res.status(400).json({ error: 'No file uploaded' });
         }
         
-        const imageUrl = `/uploads/${req.file.filename}`;
+        // Cloudinary returns the URL in req.file.path
+        const imageUrl = req.file.path;
+        
         res.json({ 
             success: true, 
             url: imageUrl,

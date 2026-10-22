@@ -501,10 +501,17 @@
                     <textarea id="project-description" required></textarea>
                 </div>
                 <div class="form-group">
-                    <label>Image (URL uniquement)</label>
-                    <input type="url" id="project-image" placeholder="https://images.unsplash.com/... (Unsplash, Imgur, etc.)" required>
+                    <label>Image</label>
+                    <input type="url" id="project-image" placeholder="https://... ou uploadez une image">
+                    <div style="margin-top: 0.5rem;">
+                        <input type="file" id="project-image-file" accept="image/*" style="display: none;">
+                        <button type="button" class="btn btn-secondary" onclick="document.getElementById('project-image-file').click()">
+                            <i class="fas fa-upload"></i> Upload vers Cloudinary
+                        </button>
+                        <img id="project-image-preview" style="display: none; max-width: 200px; margin-top: 0.5rem; border: 2px solid #1E293B; border-radius: 8px;">
+                    </div>
                     <small style="color: #94A3B8; display: block; margin-top: 0.5rem;">
-                        <i class="fas fa-info-circle"></i> Utilisez une URL d'image (Unsplash, Imgur, etc.). L'upload local ne fonctionne pas sur Vercel.
+                        <i class="fas fa-cloud-upload-alt"></i> Upload ou collez une URL d'image
                     </small>
                 </div>
                 <div class="form-group">
@@ -569,10 +576,17 @@
                     <input type="url" id="certification-url" placeholder="https://...">
                 </div>
                 <div class="form-group">
-                    <label>Image (URL uniquement)</label>
-                    <input type="url" id="certification-image" placeholder="https://images.credly.com/... (Credly, etc.)">
+                    <label>Image</label>
+                    <input type="url" id="certification-image" placeholder="https://... ou uploadez une image">
+                    <div style="margin-top: 0.5rem;">
+                        <input type="file" id="certification-image-file" accept="image/*" style="display: none;">
+                        <button type="button" class="btn btn-secondary" onclick="document.getElementById('certification-image-file').click()">
+                            <i class="fas fa-upload"></i> Upload vers Cloudinary
+                        </button>
+                        <img id="certification-image-preview" style="display: none; max-width: 200px; margin-top: 0.5rem; border: 2px solid #1E293B; border-radius: 8px;">
+                    </div>
                     <small style="color: #94A3B8; display: block; margin-top: 0.5rem;">
-                        <i class="fas fa-info-circle"></i> URL d'image uniquement (Credly pour badges AWS, etc.)
+                        <i class="fas fa-cloud-upload-alt"></i> Upload ou collez une URL (Credly, etc.)
                     </small>
                 </div>
                 <div class="form-group">

@@ -56,7 +56,7 @@ async function handleImageUpload(fileInputId, urlInputId, previewId) {
     };
     reader.readAsDataURL(file);
     
-    // Upload to server
+    // Upload to Cloudinary via server
     const formData = new FormData();
     formData.append('image', file);
     
@@ -68,8 +68,8 @@ async function handleImageUpload(fileInputId, urlInputId, previewId) {
         
         const result = await response.json();
         if (result.success) {
-            urlInput.value = window.location.origin + result.url;
-            alert('Image uploadée avec succès !');
+            urlInput.value = result.url; // Cloudinary URL
+            alert('Image uploadée avec succès sur Cloudinary !');
         } else {
             alert('Erreur lors de l\'upload');
         }
