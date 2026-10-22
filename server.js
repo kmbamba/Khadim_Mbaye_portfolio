@@ -42,6 +42,23 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Importer le module database
 const database = require('./database');
 
+// Middleware to verify JWT token
+function verifyToken(req, res, next) {
+    const token = req.headers.authorization?.replace('Bearer ', '');
+    
+    if (!token) {
+        return res.status(401).json({ error: 'Token manquant' });
+    }
+    
+    try {
+        const decoded = jwt.verify(token, JWT_SECRET);
+        req.user = decoded;
+        next();
+    } catch (error) {
+        res.status(401).json({ error: 'Token invalide' });
+    }
+}
+
 // Initialiser la base de données
 database.connect().then(() => {
     console.log('✅ Database connected successfully');
@@ -50,7 +67,7 @@ database.connect().then(() => {
 });
 
 // ===== ROUTE D'UPLOAD D'IMAGE =====
-app.post('/api/upload', upload.single('image'), (req, res) => {
+app.post('/api/upload', verifyToken, upload.single('image'), (req, res) => {
     try {
         if (!req.file) {
             return res.status(400).json({ error: 'No file uploaded' });
@@ -66,7 +83,7 @@ app.post('/api/upload', upload.single('image'), (req, res) => {
         });
     } catch (error) {
         console.error('Upload error:', error);
-        res.status(500).json({ error: 'Upload failed' });
+        res.status(500).json({ error: 'Upload failed', details: error.message });
     }
 });
 
@@ -132,15 +149,18 @@ app.get('/api/projects/:id', async (req, res) => {
 // POST - Créer un nouveau projet
 app.post('/api/projects', verifyToken, async (req, res) => {
     try {
+        console.log('📝 Creating new project:', req.body);
         const projects = await database.getCollection('projects');
         const newProject = {
             id: projects.length > 0 ? Math.max(...projects.map(p => p.id)) + 1 : 1,
             ...req.body,
             createdAt: new Date().toISOString()
         };
-        await database.addItem('projects', newProject);
-        res.status(201).json({ success: true, project: newProject });
+        const result = await database.addItem('projects', newProject);
+        console.log('✅ Project created successfully:', result);
+        res.status(201).json({ success: true, project: result });
     } catch (error) {
+        console.error('❌ Error creating project:', error);
         res.status(500).json({ error: error.message });
     }
 });
@@ -148,9 +168,16 @@ app.post('/api/projects', verifyToken, async (req, res) => {
 // PUT - Mettre à jour un projet
 app.put('/api/projects/:id', verifyToken, async (req, res) => {
     try {
-        await database.updateItem('projects', req.params.id, req.body);
-        res.json({ success: true, project: req.body });
+        console.log(`🔄 Updating project ${req.params.id}:`, req.body);
+        const result = await database.updateItem('projects', req.params.id, req.body);
+        console.log('✅ Project updated:', result);
+        if (result) {
+            res.json({ success: true, project: req.body });
+        } else {
+            res.status(404).json({ error: 'Projet non trouvé' });
+        }
     } catch (error) {
+        console.error('❌ Error updating project:', error);
         res.status(500).json({ error: error.message });
     }
 });
@@ -158,9 +185,16 @@ app.put('/api/projects/:id', verifyToken, async (req, res) => {
 // DELETE - Supprimer un projet
 app.delete('/api/projects/:id', verifyToken, async (req, res) => {
     try {
-        await database.deleteItem('projects', req.params.id);
-        res.json({ success: true, message: 'Projet supprimé' });
+        console.log(`🗑️ Deleting project ${req.params.id}`);
+        const result = await database.deleteItem('projects', req.params.id);
+        console.log('✅ Project deleted:', result);
+        if (result) {
+            res.json({ success: true, message: 'Projet supprimé' });
+        } else {
+            res.status(404).json({ error: 'Projet non trouvé' });
+        }
     } catch (error) {
+        console.error('❌ Error deleting project:', error);
         res.status(500).json({ error: error.message });
     }
 });
@@ -327,23 +361,6 @@ app.post('/api/admin/login', (req, res) => {
         });
     }
 });
-
-// Middleware to verify JWT token
-function verifyToken(req, res, next) {
-    const token = req.headers.authorization?.replace('Bearer ', '');
-    
-    if (!token) {
-        return res.status(401).json({ error: 'Token manquant' });
-    }
-    
-    try {
-        const decoded = jwt.verify(token, JWT_SECRET);
-        req.user = decoded;
-        next();
-    } catch (error) {
-        res.status(401).json({ error: 'Token invalide' });
-    }
-}
 
 // Serve index.html for the root
 app.get('/', (req, res) => {

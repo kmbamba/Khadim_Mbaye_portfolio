@@ -334,10 +334,13 @@ class Database {
     async addItem(collectionName, item) {
         if (this.type === 'mongodb' && this.db) {
             try {
+                console.log(`💾 Adding item to ${collectionName}:`, item);
                 const result = await this.db.collection(collectionName).insertOne(item);
+                console.log(`✅ Item added with ID:`, result.insertedId);
                 return { ...item, _id: result.insertedId };
             } catch (error) {
-                console.error(`Error adding item to ${collectionName}:`, error);
+                console.error(`❌ Error adding item to ${collectionName}:`, error);
+                throw error;
             }
         }
         
@@ -354,14 +357,16 @@ class Database {
     async updateItem(collectionName, id, updates) {
         if (this.type === 'mongodb' && this.db) {
             try {
-                await this.db.collection(collectionName).updateOne(
+                console.log(`🔄 Updating ${collectionName} item with ID:`, id);
+                const result = await this.db.collection(collectionName).updateOne(
                     { id: parseInt(id) },
                     { $set: updates }
                 );
-                return true;
+                console.log(`✅ Update result:`, result.modifiedCount, 'document(s) modified');
+                return result.modifiedCount > 0;
             } catch (error) {
-                console.error(`Error updating item in ${collectionName}:`, error);
-                return false;
+                console.error(`❌ Error updating item in ${collectionName}:`, error);
+                throw error;
             }
         }
         
@@ -379,11 +384,13 @@ class Database {
     async deleteItem(collectionName, id) {
         if (this.type === 'mongodb' && this.db) {
             try {
-                await this.db.collection(collectionName).deleteOne({ id: parseInt(id) });
-                return true;
+                console.log(`🗑️ Deleting ${collectionName} item with ID:`, id);
+                const result = await this.db.collection(collectionName).deleteOne({ id: parseInt(id) });
+                console.log(`✅ Delete result:`, result.deletedCount, 'document(s) deleted');
+                return result.deletedCount > 0;
             } catch (error) {
-                console.error(`Error deleting item from ${collectionName}:`, error);
-                return false;
+                console.error(`❌ Error deleting item from ${collectionName}:`, error);
+                throw error;
             }
         }
         

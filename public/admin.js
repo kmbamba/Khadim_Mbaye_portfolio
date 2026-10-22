@@ -52,6 +52,7 @@ async function handleImageUpload(fileInputId, urlInputId, previewId) {
     formData.append('image', file);
     
     try {
+        // Don't set Content-Type header for FormData - browser will set it with boundary
         const response = await fetch(`${API_URL}/upload`, {
             method: 'POST',
             headers: {
@@ -66,10 +67,11 @@ async function handleImageUpload(fileInputId, urlInputId, previewId) {
             alert('Image uploadée avec succès sur Cloudinary !');
         } else {
             alert('Erreur lors de l\'upload: ' + (result.error || 'Unknown error'));
+            console.error('Upload error:', result);
         }
     } catch (error) {
         console.error('Upload error:', error);
-        alert('Erreur lors de l\'upload');
+        alert('Erreur lors de l\'upload: ' + error.message);
     }
 }
 
